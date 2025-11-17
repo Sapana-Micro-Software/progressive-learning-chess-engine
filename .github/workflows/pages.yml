@@ -18,6 +18,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.pages.outputs.pages_enabled }}
     steps:
       - uses: actions/checkout@v4
       
@@ -57,13 +59,33 @@ jobs:
           touch dist/.nojekyll
           ls -la dist/
       
+      - name: Check Pages Status
+        id: pages
+        run: |
+          STATUS=$(gh api repos/${{ github.repository }}/pages 2>/dev/null || echo '{"build_type":"none"}')
+          if echo "$STATUS" | grep -q '"build_type":"gh_actions"'; then
+            echo "pages_enabled=true" >> $GITHUB_OUTPUT
+            echo "✅ GitHub Pages is enabled for GitHub Actions"
+          else
+            echo "pages_enabled=false" >> $GITHUB_OUTPUT
+            echo "::error::GitHub Pages is not enabled for GitHub Actions"
+            echo "::error::Please visit: https://github.com/${{ github.repository }}/settings/pages"
+            echo "::error::Set Source to 'GitHub Actions' (NOT 'Deploy from a branch') and click Save"
+            echo "::error::Then re-run this workflow"
+          fi
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        continue-on-error: true
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/dist
+        continue-on-error: true
 
   deploy:
     environment:
@@ -71,6 +93,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
