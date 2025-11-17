@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #include "test_harness.h"
 #include <stdlib.h>
 #include <stdarg.h>

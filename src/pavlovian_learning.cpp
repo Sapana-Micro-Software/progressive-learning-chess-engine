@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #include "../include/pavlovian_learning.h"
 #include "../include/chess_representation.h"
 #include <cmath>

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #include "../include/chess_representation.h"
 #include <cstring>
 #include <cstdlib>

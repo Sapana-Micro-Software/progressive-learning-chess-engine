@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #ifndef PAVLOVIAN_LEARNING_H
 #define PAVLOVIAN_LEARNING_H
 

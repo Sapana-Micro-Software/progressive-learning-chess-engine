@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #import "ChessBoardViewController.h"
 #import "../include/inference_engine.h"
 #import "../include/chess_representation.h"

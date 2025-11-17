@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #import "TrainingViewController.h"
 #import "../include/training_engine.h"
 #import "../include/neural_network.h"

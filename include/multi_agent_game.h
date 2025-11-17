@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #ifndef MULTI_AGENT_GAME_H
 #define MULTI_AGENT_GAME_H
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #ifndef INFERENCE_ENGINE_H
 #define INFERENCE_ENGINE_H
 

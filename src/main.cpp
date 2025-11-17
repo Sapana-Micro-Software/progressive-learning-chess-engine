@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #include "../include/neural_network.h"
 #include "../include/curriculum_learning.h"
 #include "../include/chess_representation.h"

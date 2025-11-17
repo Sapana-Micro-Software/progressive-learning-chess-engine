@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #import <Cocoa/Cocoa.h>
 #import "CurriculumChessApp.h"
 

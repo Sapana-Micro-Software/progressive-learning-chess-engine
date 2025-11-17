@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #ifndef CHESS_REPRESENTATION_H
 #define CHESS_REPRESENTATION_H
 

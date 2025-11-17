@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #ifndef TEST_HARNESS_H
 #define TEST_HARNESS_H
 

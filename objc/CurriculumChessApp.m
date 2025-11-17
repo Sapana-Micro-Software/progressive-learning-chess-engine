@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #import "CurriculumChessApp.h"
 #import "TrainingViewController.h"
 #import "ChessBoardViewController.h"

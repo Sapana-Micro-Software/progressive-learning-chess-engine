@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
+
 #ifndef NEURAL_NETWORK_H
 #define NEURAL_NETWORK_H
 

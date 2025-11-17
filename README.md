@@ -1,5 +1,7 @@
 # Curriculum Chess Learning System
 
+Copyright (C) 2025, Shyamal Suhana Chandra
+
 A comprehensive C/C++/Objective-C implementation of a curriculum learning system for chess and multi-agent games, featuring:
 
 - **Hybrid Neural Architecture**: Bayesian networks + LSTM layers
@@ -182,6 +184,8 @@ multi_agent_game_apply_action(game, action);
 - **LSTM**: Hochreiter & Schmidhuber (1997)
 
 ## License
+
+Copyright (C) 2025, Shyamal Suhana Chandra
 
 This implementation is provided for educational and research purposes.
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #ifndef TRAINING_ENGINE_H
 #define TRAINING_ENGINE_H
 

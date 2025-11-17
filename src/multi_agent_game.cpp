@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #include "../include/multi_agent_game.h"
 #include "../include/chess_representation.h"
 #include <cstring>

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
 #ifndef CURRICULUM_LEARNING_H
 #define CURRICULUM_LEARNING_H
 
