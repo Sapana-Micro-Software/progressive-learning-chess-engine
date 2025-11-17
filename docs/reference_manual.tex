@@ -1,0 +1,702 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\geometry{margin=1in}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Progressive Learning Chess Engine}
+\fancyhead[R]{Reference Manual}
+\fancyfoot[C]{\thepage}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Progressive Learning Chess Engine\\Reference Manual}
+\author{Sapana Micro Software}
+\date{Version 1.0\\\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+This reference manual provides comprehensive documentation for the Progressive Learning Chess Engine API. The engine implements a hybrid Bayesian-LSTM neural network architecture with curriculum learning, spaced repetition, and Pavlovian conditioning.
+
+\section{Architecture Overview}
+
+The system consists of the following major components:
+\begin{itemize}
+    \item Neural Network (Hybrid Bayesian + LSTM)
+    \item Curriculum Learning System
+    \item Spaced Repetition System
+    \item Pavlovian Learning System
+    \item Chess Representation
+    \item Training Engine
+    \item Inference Engine
+    \item Multi-Agent Game Framework
+\end{itemize}
+
+\section{Neural Network API}
+
+\subsection{Network Creation}
+
+\begin{lstlisting}[language=C++]
+NeuralNetwork* nn_create_hybrid(
+    size_t input_size,    // Input vector dimension
+    size_t hidden_size,   // Hidden layer dimension
+    size_t output_size    // Output vector dimension
+);
+\end{lstlisting}
+
+Creates a hybrid neural network with one Bayesian layer and one LSTM layer.
+
+\textbf{Example:}
+\begin{lstlisting}[language=C++]
+NeuralNetwork* nn = nn_create_hybrid(768, 512, 4096);
+// 768 = 8×8×12 chess board representation
+// 512 = hidden layer size
+// 4096 = possible moves (64×64)
+\end{lstlisting}
+
+\subsection{Forward Pass}
+
+\begin{lstlisting}[language=C++]
+void nn_forward(
+    NeuralNetwork* nn,
+    const double* input,  // Input vector
+    double* output        // Output vector (pre-allocated)
+);
+\end{lstlisting}
+
+Performs forward propagation through the network.
+
+\subsection{Backward Pass}
+
+\begin{lstlisting}[language=C++]
+void nn_backward(
+    NeuralNetwork* nn,
+    const double* target,  // Target output vector
+    double* loss          // Computed loss (output)
+);
+\end{lstlisting}
+
+Performs backpropagation and computes mean squared error loss.
+
+\subsection{Network Destruction}
+
+\begin{lstlisting}[language=C++]
+void nn_destroy(NeuralNetwork* nn);
+\end{lstlisting}
+
+Frees all memory associated with the network.
+
+\section{Optimizer API}
+
+\subsection{Optimizer Types}
+
+\begin{lstlisting}[language=C++]
+typedef enum {
+    OPTIMIZER_SGD,      // Stochastic Gradient Descent
+    OPTIMIZER_ADAM,     // Adaptive Moment Estimation
+    OPTIMIZER_ADAGRAD,  // Adaptive Gradient
+    OPTIMIZER_RMSPROP   // Root Mean Square Propagation
+} OptimizerType;
+\end{lstlisting}
+
+\subsection{Optimizer Creation}
+
+\begin{lstlisting}[language=C++]
+Optimizer* optimizer_create(
+    OptimizerType type,
+    double learning_rate
+);
+\end{lstlisting}
+
+\subsection{Weight Update}
+
+\begin{lstlisting}[language=C++]
+void optimizer_update(
+    Optimizer* opt,
+    NeuralNetwork* nn
+);
+\end{lstlisting}
+
+Updates network weights using the specified optimizer algorithm.
+
+\section{Curriculum Learning API}
+
+\subsection{Curriculum Creation}
+
+\begin{lstlisting}[language=C++]
+Curriculum* curriculum_create(size_t num_levels);
+\end{lstlisting}
+
+Creates a curriculum with the specified number of difficulty levels (typically 10).
+
+\subsection{Difficulty Levels}
+
+\begin{lstlisting}[language=C++]
+typedef enum {
+    LEVEL_PRESCHOOL = 0,
+    LEVEL_KINDERGARTEN,
+    LEVEL_ELEMENTARY,
+    LEVEL_MIDDLE_SCHOOL,
+    LEVEL_HIGH_SCHOOL,
+    LEVEL_UNDERGRAD,
+    LEVEL_GRADUATE,
+    LEVEL_MASTER,
+    LEVEL_GRANDMASTER,
+    LEVEL_INFINITE
+} DifficultyLevelEnum;
+\end{lstlisting}
+
+\subsection{Adding Examples}
+
+\begin{lstlisting}[language=C++]
+void curriculum_add_example(
+    Curriculum* curriculum,
+    TrainingExample* example,
+    DifficultyLevelEnum level
+);
+\end{lstlisting}
+
+Adds a training example to the specified difficulty level.
+
+\textbf{TrainingExample structure:}
+\begin{lstlisting}[language=C++]
+typedef struct {
+    double* input;          // Input vector
+    double* target;         // Target output vector
+    double difficulty;      // Difficulty score (0.0-1.0)
+    size_t input_size;
+    size_t target_size;
+    bool is_correct;        // For spaced repetition
+    size_t attempts;
+    size_t correct_streak;
+    double last_reviewed;
+    double next_review;
+} TrainingExample;
+\end{lstlisting}
+
+\subsection{Level Advancement}
+
+\begin{lstlisting}[language=C++]
+bool curriculum_should_advance(
+    Curriculum* curriculum,
+    double accuracy  // Current accuracy (0.0-1.0)
+);
+\end{lstlisting}
+
+Returns true if accuracy meets the mastery threshold (default 0.85).
+
+\begin{lstlisting}[language=C++]
+void curriculum_advance_level(Curriculum* curriculum);
+\end{lstlisting}
+
+Advances to the next difficulty level.
+
+\begin{lstlisting}[language=C++]
+DifficultyLevelEnum curriculum_get_current_level(
+    Curriculum* curriculum
+);
+\end{lstlisting}
+
+Returns the current difficulty level.
+
+\section{Spaced Repetition API}
+
+\subsection{System Creation}
+
+\begin{lstlisting}[language=C++]
+SpacedRepetition* spaced_repetition_create(
+    size_t capacity,      // Maximum number of examples
+    double ltm_threshold  // Correct streak for LTM (default 5.0)
+);
+\end{lstlisting}
+
+\subsection{Adding Examples}
+
+\begin{lstlisting}[language=C++]
+void spaced_repetition_add_example(
+    SpacedRepetition* sr,
+    TrainingExample* example
+);
+\end{lstlisting}
+
+\subsection{Getting Next Review}
+
+\begin{lstlisting}[language=C++]
+TrainingExample* spaced_repetition_get_next_review(
+    SpacedRepetition* sr
+);
+\end{lstlisting}
+
+Returns the example that is due for review (next\_review $\leq$ current time).
+
+\subsection{Updating After Review}
+
+\begin{lstlisting}[language=C++]
+void spaced_repetition_update_example(
+    SpacedRepetition* sr,
+    size_t index,        // Example index
+    bool is_correct      // Review result
+);
+\end{lstlisting}
+
+Updates the example based on review result and calculates next review interval using exponential spacing.
+
+\subsection{Long-Term Memory Check}
+
+\begin{lstlisting}[language=C++]
+bool spaced_repetition_is_in_ltm(
+    SpacedRepetition* sr,
+    size_t index
+);
+\end{lstlisting}
+
+Returns true if the example has reached long-term memory (correct\_streak $\geq$ ltm\_threshold).
+
+\section{Pavlovian Learning API}
+
+\subsection{Learner Creation}
+
+\begin{lstlisting}[language=C++]
+typedef enum {
+    PAVLOVIAN_CLASSICAL_CONDITIONING,
+    PAVLOVIAN_REWARD_BASED,
+    PAVLOVIAN_INSTRUMENTAL,
+    PAVLOVIAN_HYBRID
+} PavlovianType;
+
+PavlovianLearner* pavlovian_learner_create(
+    PavlovianType type,
+    double learning_rate
+);
+\end{lstlisting}
+
+\subsection{Stimulus Structures}
+
+\begin{lstlisting}[language=C++]
+typedef struct {
+    double* stimulus_vector;
+    size_t stimulus_size;
+    double intensity;
+    double timestamp;
+    size_t occurrence_count;
+} ConditionedStimulus;
+
+typedef struct {
+    double* stimulus_vector;
+    size_t stimulus_size;
+    double reward_value;  // Positive or negative
+    double intensity;
+    double timestamp;
+} UnconditionedStimulus;
+\end{lstlisting}
+
+\subsection{Pairing Stimuli}
+
+\begin{lstlisting}[language=C++]
+void pavlovian_pair_stimuli(
+    PavlovianLearner* learner,
+    const ConditionedStimulus* cs,
+    const UnconditionedStimulus* us
+);
+\end{lstlisting}
+
+Pairs a conditioned stimulus (e.g., chess position) with an unconditioned stimulus (e.g., reward/punishment) using the Rescorla-Wagner model.
+
+\subsection{Getting Expected Reward}
+
+\begin{lstlisting}[language=C++]
+double pavlovian_get_expected_reward(
+    PavlovianLearner* learner,
+    const ConditionedStimulus* cs
+);
+\end{lstlisting}
+
+Returns the expected reward value for a given conditioned stimulus based on learned associations.
+
+\subsection{Extinction}
+
+\begin{lstlisting}[language=C++]
+void pavlovian_extinction(
+    PavlovianLearner* learner,
+    const ConditionedStimulus* cs
+);
+\end{lstlisting}
+
+Performs extinction by presenting CS without US, causing association strength to decay.
+
+\section{Chess Representation API}
+
+\subsection{Position Creation}
+
+\begin{lstlisting}[language=C++]
+ChessPosition* chess_position_create(void);
+\end{lstlisting}
+
+Creates a new chess position initialized to the starting position.
+
+\begin{lstlisting}[language=C++]
+ChessPosition* chess_position_from_fen(const char* fen);
+\end{lstlisting}
+
+Creates a chess position from a FEN string.
+
+\textbf{Example:}
+\begin{lstlisting}[language=C++]
+const char* start_fen = 
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+ChessPosition* pos = chess_position_from_fen(start_fen);
+\end{lstlisting}
+
+\subsection{FEN Conversion}
+
+\begin{lstlisting}[language=C++]
+void chess_position_to_fen(
+    ChessPosition* pos,
+    FENString* fen  // Output FEN string
+);
+\end{lstlisting}
+
+\subsection{Matrix Conversion}
+
+\begin{lstlisting}[language=C++]
+void chess_position_to_matrix(
+    ChessPosition* pos,
+    double* matrix  // 8×8×12 output matrix
+);
+\end{lstlisting}
+
+Converts position to a 3D matrix where each 8×8 plane represents one piece type and color combination.
+
+\subsection{Move Operations}
+
+\begin{lstlisting}[language=C++]
+void chess_position_generate_moves(
+    ChessPosition* pos,
+    Color color,           // WHITE or BLACK
+    ChessMove* moves,      // Output array
+    size_t* num_moves     // Number of moves generated
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+bool chess_position_is_legal_move(
+    ChessPosition* pos,
+    const ChessMove* move
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+void chess_position_make_move(
+    ChessPosition* pos,
+    const ChessMove* move
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+void chess_position_unmake_move(ChessPosition* pos);
+\end{lstlisting}
+
+\section{Training Engine API}
+
+\subsection{Configuration}
+
+\begin{lstlisting}[language=C++]
+typedef struct {
+    OptimizerType optimizer_type;
+    double learning_rate;
+    double momentum;
+    double weight_decay;
+    size_t batch_size;
+    size_t max_epochs;
+    double early_stopping_threshold;
+    bool use_curriculum;
+    bool use_pavlovian;
+    bool use_spaced_repetition;
+    double mastery_threshold;
+    size_t patience;
+} TrainingConfig;
+\end{lstlisting}
+
+\subsection{Engine Creation}
+
+\begin{lstlisting}[language=C++]
+TrainingEngine* training_engine_create(
+    NeuralNetwork* nn,
+    TrainingConfig* config
+);
+\end{lstlisting}
+
+\subsection{Training}
+
+\begin{lstlisting}[language=C++]
+void training_engine_train_with_curriculum(
+    TrainingEngine* engine
+);
+\end{lstlisting}
+
+Trains the network using curriculum learning, Pavlovian conditioning, and spaced repetition as configured.
+
+\subsection{Statistics}
+
+\begin{lstlisting}[language=C++]
+typedef struct {
+    double current_loss;
+    double average_loss;
+    double accuracy;
+    size_t epoch;
+    size_t examples_seen;
+    DifficultyLevelEnum current_level;
+    double training_time;
+    double validation_accuracy;
+} TrainingStats;
+
+TrainingStats* training_engine_get_stats(
+    TrainingEngine* engine
+);
+\end{lstlisting}
+
+\section{Inference Engine API}
+
+\subsection{Engine Creation}
+
+\begin{lstlisting}[language=C++]
+InferenceEngine* inference_engine_create(NeuralNetwork* nn);
+\end{lstlisting}
+
+\subsection{Position Evaluation}
+
+\begin{lstlisting}[language=C++]
+double inference_engine_evaluate_position(
+    InferenceEngine* engine,
+    const ChessPosition* pos
+);
+\end{lstlisting}
+
+Returns an evaluation score for the position (positive favors white, negative favors black).
+
+\subsection{Move Prediction}
+
+\begin{lstlisting}[language=C++]
+ChessMove* inference_engine_predict_move(
+    InferenceEngine* engine,
+    const ChessPosition* pos
+);
+\end{lstlisting}
+
+Predicts the best move for the current position.
+
+\subsection{Search}
+
+\begin{lstlisting}[language=C++]
+ChessMove* inference_engine_search_move(
+    InferenceEngine* engine,
+    const ChessPosition* pos,
+    size_t depth  // Search depth
+);
+\end{lstlisting}
+
+Performs minimax search to specified depth.
+
+\section{Multi-Agent Game API}
+
+\subsection{Game Types}
+
+\begin{lstlisting}[language=C++]
+typedef enum {
+    GAME_CHESS,
+    GAME_FOOTBALL,
+    GAME_BASKETBALL,
+    GAME_BASEBALL,
+    GAME_HOCKEY,
+    GAME_SOCCER,
+    GAME_TENNIS,
+    GAME_GENERIC
+} GameType;
+\end{lstlisting}
+
+\subsection{Game Creation}
+
+\begin{lstlisting}[language=C++]
+MultiAgentGame* multi_agent_game_create(
+    GameType game_type,
+    size_t num_agents
+);
+\end{lstlisting}
+
+\subsection{Agent Management}
+
+\begin{lstlisting}[language=C++]
+Agent* agent_create(
+    size_t agent_id,
+    AgentType type,
+    size_t action_space_size
+);
+\end{lstlisting}
+
+\subsection{Chess as Multi-Agent}
+
+\begin{lstlisting}[language=C++]
+MultiAgentGame* chess_as_multi_agent_create(void);
+\end{lstlisting}
+
+Creates a chess game where white and black are separate agents.
+
+\section{Usage Examples}
+
+\subsection{Basic Training Example}
+
+\begin{lstlisting}[language=C++]
+// Create network
+NeuralNetwork* nn = nn_create_hybrid(768, 512, 4096);
+
+// Configure training
+TrainingConfig config;
+config.optimizer_type = OPTIMIZER_ADAM;
+config.learning_rate = 0.001;
+config.use_curriculum = true;
+config.use_pavlovian = true;
+config.use_spaced_repetition = true;
+config.max_epochs = 100;
+
+// Create training engine
+TrainingEngine* engine = training_engine_create(nn, &config);
+
+// Train
+training_engine_train_with_curriculum(engine);
+
+// Get statistics
+TrainingStats* stats = training_engine_get_stats(engine);
+printf("Accuracy: %.2f%%, Level: %d\n", 
+       stats->accuracy * 100, stats->current_level);
+
+// Cleanup
+training_engine_destroy(engine);
+\end{lstlisting}
+
+\subsection{Position Evaluation Example}
+
+\begin{lstlisting}[language=C++]
+// Create inference engine
+NeuralNetwork* nn = nn_create_hybrid(768, 512, 4096);
+InferenceEngine* engine = inference_engine_create(nn);
+
+// Load position
+ChessPosition* pos = chess_position_from_fen(
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+);
+
+// Evaluate
+double eval = inference_engine_evaluate_position(engine, pos);
+printf("Position evaluation: %.4f\n", eval);
+
+// Predict move
+ChessMove* move = inference_engine_predict_move(engine, pos);
+printf("Best move: %d -> %d\n", move->from, move->to);
+
+// Cleanup
+chess_position_destroy(pos);
+inference_engine_destroy(engine);
+\end{lstlisting}
+
+\subsection{Curriculum Learning Example}
+
+\begin{lstlisting}[language=C++]
+// Create curriculum
+Curriculum* curriculum = curriculum_create(10);
+
+// Add examples at different levels
+TrainingExample example;
+example.input_size = 768;
+example.target_size = 4096;
+example.input = new double[768];
+example.target = new double[4096];
+// ... populate example ...
+
+curriculum_add_example(curriculum, &example, LEVEL_PRESCHOOL);
+
+// Train and check advancement
+double accuracy = 0.90;
+if (curriculum_should_advance(curriculum, accuracy)) {
+    curriculum_advance_level(curriculum);
+    DifficultyLevelEnum level = curriculum_get_current_level(curriculum);
+    printf("Advanced to level %d\n", level);
+}
+
+curriculum_destroy(curriculum);
+\end{lstlisting}
+
+\section{Error Handling}
+
+All functions that return pointers return \texttt{NULL} on failure. Functions that modify state should be checked for success. Memory management follows standard C++ patterns: objects created with \texttt{create} functions must be destroyed with corresponding \texttt{destroy} functions.
+
+\section{Thread Safety}
+
+The current implementation is not thread-safe. Concurrent access to the same network, curriculum, or training engine from multiple threads requires external synchronization.
+
+\section{Performance Considerations}
+
+\begin{itemize}
+    \item Network forward/backward passes are O($n \times m$) where $n$ is input size and $m$ is hidden size
+    \item Curriculum level advancement is O(1)
+    \item Spaced repetition review selection is O($k$) where $k$ is number of examples
+    \item Position evaluation is O(1) after network forward pass
+    \item Move search is O($b^d$) where $b$ is branching factor and $d$ is depth
+\end{itemize}
+
+\section{Memory Management}
+
+All dynamically allocated memory is managed by the library. Users should:
+\begin{itemize}
+    \item Always call \texttt{destroy} functions for created objects
+    \item Not free memory returned by the library
+    \item Copy data if persistence beyond object lifetime is needed
+\end{itemize}
+
+\section{Version History}
+
+\begin{itemize}
+    \item \textbf{Version 1.0} (Current): Initial release with full API
+\end{itemize}
+
+\section{License}
+
+Copyright © Sapana Micro Software. All rights reserved.
+
+\end{document}
