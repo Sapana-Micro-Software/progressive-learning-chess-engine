@@ -58,6 +58,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
+      - name: Create .nojekyll
+        run: touch docs/dist/.nojekyll
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
