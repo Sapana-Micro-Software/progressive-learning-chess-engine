@@ -26,3 +26,23 @@ Thumbs.db
 
 # Test artifacts
 *.log
+
+# Node.js
+node_modules/
+npm-debug.log
+package-lock.json
+
+# TypeScript
+*.tsbuildinfo
+dist/*.d.ts
+dist/*.d.ts.map
+dist/*.js.map
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
