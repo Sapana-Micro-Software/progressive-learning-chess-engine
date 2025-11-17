@@ -3,8 +3,8 @@
 
 // Background Canvas Animation
 class BackgroundCanvas {
-    private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement | null = null;
+    private ctx: CanvasRenderingContext2D | null = null;
     private particles: Particle[] = [];
     private animationId: number = 0;
 
@@ -12,7 +12,9 @@ class BackgroundCanvas {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         if (!this.canvas) return;
         
-        this.ctx = this.canvas.getContext('2d')!;
+        const context = this.canvas.getContext('2d');
+        if (!context) return;
+        this.ctx = context;
         this.resize();
         this.initParticles();
         this.animate();
@@ -20,12 +22,14 @@ class BackgroundCanvas {
         window.addEventListener('resize', () => this.resize());
     }
 
-    private resize() {
+    private resize(): void {
+        if (!this.canvas) return;
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
     }
 
-    private initParticles() {
+    private initParticles(): void {
+        if (!this.canvas) return;
         const count = Math.floor((this.canvas.width * this.canvas.height) / 15000);
         this.particles = [];
         
@@ -39,12 +43,13 @@ class BackgroundCanvas {
         }
     }
 
-    private animate() {
+    private animate(): void {
+        if (!this.ctx || !this.canvas) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         this.particles.forEach(particle => {
             particle.update();
-            particle.draw(this.ctx);
+            particle.draw(this.ctx!);
         });
 
         // Draw connections
@@ -53,7 +58,8 @@ class BackgroundCanvas {
         this.animationId = requestAnimationFrame(() => this.animate());
     }
 
-    private drawConnections() {
+    private drawConnections(): void {
+        if (!this.ctx) return;
         for (let i = 0; i < this.particles.length; i++) {
             for (let j = i + 1; j < this.particles.length; j++) {
                 const dx = this.particles[i].x - this.particles[j].x;
@@ -92,7 +98,7 @@ class Particle {
         this.maxY = maxY;
     }
 
-    update() {
+    update(): void {
         this.x += this.vx;
         this.y += this.vy;
 
@@ -100,7 +106,7 @@ class Particle {
         if (this.y < 0 || this.y > this.maxY) this.vy *= -1;
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
+    draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = 'rgba(99, 102, 241, 0.5)';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -110,8 +116,8 @@ class Particle {
 
 // Network Visualization Canvas
 class NetworkVisualization {
-    private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement | null = null;
+    private ctx: CanvasRenderingContext2D | null = null;
     private nodes: NetworkNode[] = [];
     private connections: Connection[] = [];
     private animationId: number = 0;
@@ -120,12 +126,15 @@ class NetworkVisualization {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         if (!this.canvas) return;
         
-        this.ctx = this.canvas.getContext('2d')!;
+        const context = this.canvas.getContext('2d');
+        if (!context) return;
+        this.ctx = context;
         this.initNetwork();
         this.animate();
     }
 
-    private initNetwork() {
+    private initNetwork(): void {
+        if (!this.canvas) return;
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
         
@@ -177,17 +186,18 @@ class NetworkVisualization {
         }
     }
 
-    private animate() {
+    private animate(): void {
+        if (!this.ctx || !this.canvas) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Draw connections
         this.connections.forEach(conn => {
             conn.update();
-            conn.draw(this.ctx, this.nodes);
+            conn.draw(this.ctx!, this.nodes);
         });
 
         // Draw nodes
-        this.nodes.forEach(node => node.draw(this.ctx));
+        this.nodes.forEach(node => node.draw(this.ctx!));
 
         this.animationId = requestAnimationFrame(() => this.animate());
     }
@@ -207,7 +217,7 @@ class NetworkNode {
         this.label = label;
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
+    draw(ctx: CanvasRenderingContext2D): void {
         this.pulse += 0.05;
         const radius = 15 + Math.sin(this.pulse) * 3;
         
@@ -244,11 +254,11 @@ class Connection {
         this.to = to;
     }
 
-    update() {
+    update(): void {
         this.pulse += 0.02;
     }
 
-    draw(ctx: CanvasRenderingContext2D, nodes: NetworkNode[]) {
+    draw(ctx: CanvasRenderingContext2D, nodes: NetworkNode[]): void {
         const fromNode = nodes[this.from];
         const toNode = nodes[this.to];
         
@@ -264,18 +274,21 @@ class Connection {
 
 // Architecture Diagram
 class ArchitectureDiagram {
-    private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement | null = null;
+    private ctx: CanvasRenderingContext2D | null = null;
 
     constructor(canvasId: string) {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         if (!this.canvas) return;
         
-        this.ctx = this.canvas.getContext('2d')!;
+        const context = this.canvas.getContext('2d');
+        if (!context) return;
+        this.ctx = context;
         this.draw();
     }
 
-    private draw() {
+    private draw(): void {
+        if (!this.ctx || !this.canvas) return;
         const ctx = this.ctx;
         const width = this.canvas.width;
         const height = this.canvas.height;
@@ -329,7 +342,8 @@ class ArchitectureDiagram {
         ctx.setLineDash([]);
     }
 
-    private drawComponent(x: number, y: number, w: number, h: number, color: string, label: string) {
+    private drawComponent(x: number, y: number, w: number, h: number, color: string, label: string): void {
+        if (!this.ctx) return;
         const ctx = this.ctx;
         
         // Shadow
@@ -354,11 +368,13 @@ class ArchitectureDiagram {
 }
 
 // Smooth Scroll
-function initSmoothScroll() {
+function initSmoothScroll(): void {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function (this: HTMLAnchorElement, e: Event) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href')!);
+            const href = this.getAttribute('href');
+            if (!href) return;
+            const target = document.querySelector(href);
             if (target) {
                 target.scrollIntoView({
                     behavior: 'smooth',
@@ -370,7 +386,7 @@ function initSmoothScroll() {
 }
 
 // Intersection Observer for animations
-function initScrollAnimations() {
+function initScrollAnimations(): void {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -387,7 +403,7 @@ function initScrollAnimations() {
 }
 
 // Mobile menu toggle
-function initMobileMenu() {
+function initMobileMenu(): void {
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.querySelector('.nav-links');
     
