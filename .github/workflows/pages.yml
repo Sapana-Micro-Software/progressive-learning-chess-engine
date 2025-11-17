@@ -41,11 +41,11 @@ jobs:
       - name: Compile PDFs
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-latex-recommended
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-latex-recommended || true
           cd docs
-          pdflatex -interaction=nonstopmode paper.tex || true
-          pdflatex -interaction=nonstopmode reference_manual.tex || true
-          pdflatex -interaction=nonstopmode presentation.tex || true
+          pdflatex -interaction=nonstopmode paper.tex || echo "PDF compilation skipped"
+          pdflatex -interaction=nonstopmode reference_manual.tex || echo "PDF compilation skipped"
+          pdflatex -interaction=nonstopmode presentation.tex || echo "PDF compilation skipped"
       
       - name: Copy files to dist
         run: |
@@ -55,11 +55,10 @@ jobs:
           cp presentation.pdf dist/ 2>/dev/null || echo "PDF compilation skipped"
           cp -r public/* dist/ 2>/dev/null || true
           touch dist/.nojekyll
+          ls -la dist/
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          enablement: true
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
