@@ -63,7 +63,7 @@ jobs:
         id: pages
         run: |
           STATUS=$(gh api repos/${{ github.repository }}/pages 2>/dev/null || echo '{"build_type":"none"}')
-          if echo "$STATUS" | grep -q '"build_type":"gh_actions"'; then
+          if echo "$STATUS" | grep -qE '"build_type":"(gh_actions|workflow)"'; then
             echo "pages_enabled=true" >> $GITHUB_OUTPUT
             echo "✅ GitHub Pages is enabled for GitHub Actions"
           else
