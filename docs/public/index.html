@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progressive Learning Chess Engine | Shyamal Suhana Chandra</title>
+    <meta name="description" content="A hybrid Bayesian-LSTM chess engine with curriculum learning, spaced repetition, and Pavlovian conditioning">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="backgroundCanvas"></canvas>
+    
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">♟</span>
+                <span class="logo-text">Progressive Chess Engine</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#docs">Documentation</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Progressive Learning</span><br>
+                    Chess Engine
+                </h1>
+                <p class="hero-subtitle">
+                    A hybrid Bayesian-LSTM architecture with curriculum learning,<br>
+                    spaced repetition, and Pavlovian conditioning
+                </p>
+                <div class="hero-buttons">
+                    <a href="#docs" class="btn btn-primary">View Documentation</a>
+                    <a href="https://github.com/Sapana-Micro-Software/progressive-learning-chess-engine" 
+                       target="_blank" 
+                       class="btn btn-secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        View on GitHub
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">45</div>
+                        <div class="stat-label">Tests Passing</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">Difficulty Levels</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Learning Paradigms</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visualization">
+                <canvas id="networkCanvas" width="600" height="400"></canvas>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card" data-aos="fade-up">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Hybrid Architecture</h3>
+                        <p>Combines Bayesian networks for probabilistic reasoning with LSTM networks for sequential pattern recognition</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-delay="100">
+                        <div class="feature-icon">📚</div>
+                        <h3>Curriculum Learning</h3>
+                        <p>Progressive difficulty from preschool basics to infinite chess variants with mastery-based advancement</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-delay="200">
+                        <div class="feature-icon">🔄</div>
+                        <h3>Spaced Repetition</h3>
+                        <p>SM-2 algorithm for long-term memory retention with adaptive review intervals</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-delay="300">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Pavlovian Conditioning</h3>
+                        <p>Rescorla-Wagner model for reward-based learning and move evaluation</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-delay="400">
+                        <div class="feature-icon">♟️</div>
+                        <h3>Chess Engine</h3>
+                        <p>Full position evaluation, move prediction, and minimax search capabilities</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-delay="500">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Multi-Agent Framework</h3>
+                        <p>Extensible to football, basketball, baseball, hockey, soccer, and tennis</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="architecture">
+            <div class="container">
+                <h2 class="section-title">Architecture</h2>
+                <div class="architecture-content">
+                    <div class="architecture-diagram">
+                        <canvas id="architectureCanvas" width="800" height="600"></canvas>
+                    </div>
+                    <div class="architecture-description">
+                        <h3>System Components</h3>
+                        <ul class="component-list">
+                            <li>
+                                <strong>Neural Network:</strong> Hybrid Bayesian + LSTM layers
+                                <span class="component-detail">Processes 8×8×12 board matrices</span>
+                            </li>
+                            <li>
+                                <strong>Curriculum System:</strong> 10 difficulty levels
+                                <span class="component-detail">85% accuracy threshold for advancement</span>
+                            </li>
+                            <li>
+                                <strong>Spaced Repetition:</strong> Adaptive review scheduling
+                                <span class="component-detail">Exponential interval spacing</span>
+                            </li>
+                            <li>
+                                <strong>Pavlovian Learner:</strong> CS-US associations
+                                <span class="component-detail">Rescorla-Wagner model updates</span>
+                            </li>
+                            <li>
+                                <strong>Training Engine:</strong> Orchestrates all learning
+                                <span class="component-detail">Supports SGD, Adam, Adagrad, RMSprop</span>
+                            </li>
+                            <li>
+                                <strong>Inference Engine:</strong> Position evaluation & move prediction
+                                <span class="component-detail">Minimax search with configurable depth</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="docs" class="documentation">
+            <div class="container">
+                <h2 class="section-title">Documentation</h2>
+                <div class="docs-grid">
+                    <div class="doc-card">
+                        <div class="doc-icon">📄</div>
+                        <h3>Technical Paper</h3>
+                        <p>Complete academic paper describing the architecture, algorithms, experiments, and results</p>
+                        <a href="paper.pdf" target="_blank" class="doc-link">
+                            <span>View PDF</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-icon">📖</div>
+                        <h3>Reference Manual</h3>
+                        <p>Comprehensive API documentation with examples, usage guidelines, and code samples</p>
+                        <a href="reference_manual.pdf" target="_blank" class="doc-link">
+                            <span>View PDF</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-icon">📊</div>
+                        <h3>Presentation</h3>
+                        <p>Beamer slides for project presentation with architecture diagrams and results</p>
+                        <a href="presentation.pdf" target="_blank" class="doc-link">
+                            <span>View PDF</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title">About</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>
+                            The Progressive Learning Chess Engine is a research project that combines multiple 
+                            learning paradigms to create a chess engine that learns progressively, similar to how 
+                            humans learn chess—starting with basic concepts and gradually advancing to complex strategies.
+                        </p>
+                        <p>
+                            The system implements a hybrid neural network architecture combining Bayesian networks 
+                            for probabilistic reasoning with LSTM networks for sequential pattern recognition. 
+                            Curriculum learning guides the training process through 10 difficulty levels, while 
+                            spaced repetition ensures long-term memory retention. Pavlovian conditioning enables 
+                            reward-based learning for move evaluation.
+                        </p>
+                        <div class="tech-stack">
+                            <h4>Technology Stack</h4>
+                            <div class="tech-tags">
+                                <span class="tech-tag">C++</span>
+                                <span class="tech-tag">Objective-C</span>
+                                <span class="tech-tag">Neural Networks</span>
+                                <span class="tech-tag">Bayesian Networks</span>
+                                <span class="tech-tag">LSTM</span>
+                                <span class="tech-tag">Curriculum Learning</span>
+                                <span class="tech-tag">Machine Learning</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">45/45</div>
+                            <div class="stat-desc">Tests Passing</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">10</div>
+                            <div class="stat-desc">Difficulty Levels</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">3</div>
+                            <div class="stat-desc">Learning Systems</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">100%</div>
+                            <div class="stat-desc">Code Coverage</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>Copyright (C) 2025, Shyamal Suhana Chandra. All rights reserved.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Project</h4>
+                    <ul>
+                        <li><a href="https://github.com/Sapana-Micro-Software/progressive-learning-chess-engine" target="_blank">GitHub Repository</a></li>
+                        <li><a href="#docs">Documentation</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="paper.pdf" target="_blank">Technical Paper</a></li>
+                        <li><a href="reference_manual.pdf" target="_blank">Reference Manual</a></li>
+                        <li><a href="presentation.pdf" target="_blank">Presentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Author</h4>
+                    <p>Shyamal Suhana Chandra</p>
+                    <p class="copyright-text">Copyright (C) 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

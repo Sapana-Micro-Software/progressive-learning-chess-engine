@@ -1,0 +1,19 @@
+\frametitle{Training Pipeline}
+\begin{lstlisting}[language=C++, basicstyle=\tiny]
+Initialize neural network, curriculum, Pavlovian learner
+WHILE not converged:
+    level = current curriculum level
+    examples = get examples for level
+    FOR each example:
+        output = forward pass(network, input)
+        loss = backward pass(network, target)
+        Update weights
+        IF correct:
+            Pair CS (position) with US (reward)
+            Update spaced repetition (success)
+        ELSE:
+            Pair CS (position) with US (punishment)
+            Update spaced repetition (failure)
+    IF accuracy >= 0.85:
+        Advance to next level
+\end{lstlisting}

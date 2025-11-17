@@ -1,0 +1,19 @@
+{
+  "name": "progressive-learning-chess-engine",
+  "version": "1.0.0",
+  "description": "Progressive Learning Chess Engine - GitHub Pages",
+  "scripts": {
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "cp -r public/* dist/ 2>/dev/null || true",
+    "dev": "tsc --watch",
+    "serve": "npx http-server dist -p 8080",
+    "compile-pdfs": "cd docs && pdflatex -interaction=nonstopmode paper.tex && pdflatex -interaction=nonstopmode reference_manual.tex && pdflatex -interaction=nonstopmode presentation.tex"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "http-server": "^14.1.1"
+  },
+  "author": "Shyamal Suhana Chandra",
+  "license": "Copyright (C) 2025, Shyamal Suhana Chandra"
+}
