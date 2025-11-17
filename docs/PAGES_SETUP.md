@@ -2,48 +2,45 @@
 
 Copyright (C) 2025, Shyamal Suhana Chandra
 
-## Manual Setup Required
+## ✅ GitHub Pages is Now Enabled!
 
-GitHub Pages needs to be enabled manually in the repository settings before the workflow can deploy.
+GitHub Pages has been enabled for this repository. The site will be automatically built and deployed via GitHub Actions.
 
-### Steps to Enable GitHub Pages:
+### Website URL
 
-1. Go to your repository on GitHub:
-   https://github.com/Sapana-Micro-Software/progressive-learning-chess-engine
+Your site will be available at:
+**https://sapana-micro-software.github.io/progressive-learning-chess-engine/**
 
-2. Navigate to **Settings** → **Pages**
+### Automatic Deployment
 
-3. Under **Source**, select:
+The GitHub Actions workflow (`.github/workflows/pages.yml`) will:
+1. Install Node.js dependencies
+2. Compile TypeScript to JavaScript
+3. Compile LaTeX documents to PDFs (if LaTeX is available)
+4. Build the website
+5. Deploy to GitHub Pages
+
+### Manual Configuration (if needed)
+
+If you need to change the Pages configuration manually:
+
+1. Go to: https://github.com/Sapana-Micro-Software/progressive-learning-chess-engine/settings/pages
+
+2. Under **Source**, ensure:
    - **Source**: `GitHub Actions`
-   - (Do NOT select a branch - use GitHub Actions instead)
+   - (NOT "Deploy from a branch")
 
-4. Click **Save**
-
-5. The GitHub Actions workflow will automatically build and deploy your site.
-
-### Alternative: Enable via GitHub CLI
-
-If you have the necessary permissions, you can enable Pages via CLI:
-
-```bash
-gh api repos/Sapana-Micro-Software/progressive-learning-chess-engine/pages \
-  -X POST \
-  -f source[type]=gh_actions \
-  -f source[branch]=main
-```
-
-### After Enabling
-
-Once Pages is enabled:
-- The workflow will run automatically on every push to `main`
-- Your site will be available at:
-  `https://sapana-micro-software.github.io/progressive-learning-chess-engine/`
-- Build logs will be visible in the **Actions** tab
+3. Click **Save**
 
 ### Troubleshooting
 
-If you see "Get Pages site failed":
-1. Verify Pages is enabled in Settings → Pages
-2. Check that the source is set to "GitHub Actions" (not a branch)
-3. Ensure the workflow file is in `.github/workflows/pages.yml`
-4. Check the Actions tab for build errors
+If the workflow fails:
+1. Check the **Actions** tab for build errors
+2. Verify Pages is set to "GitHub Actions" in Settings → Pages
+3. Ensure the workflow file exists at `.github/workflows/pages.yml`
+4. Check that `docs/dist/` contains the built files
+
+### Build Status
+
+You can monitor the build status in the **Actions** tab:
+https://github.com/Sapana-Micro-Software/progressive-learning-chess-engine/actions
